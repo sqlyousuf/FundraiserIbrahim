@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masjid Ibrahim — Fundraiser Display</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel+Decorative:wght@700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C8973A;--gold-light:#F0C96A;--gold-dark:#8B6420;
+  --teal:#0D5C63;--teal-light:#1A7F88;--dark:#0a1228;--emerald:#1B6B4E;--cream:#FDF6E3;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;}
+body{background:var(--dark);color:var(--cream);font-family:Lato,sans-serif;min-height:100vh;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(60deg,transparent,transparent 60px,rgba(200,151,58,0.03) 60px,rgba(200,151,58,0.03) 61px),repeating-linear-gradient(-60deg,transparent,transparent 60px,rgba(200,151,58,0.03) 60px,rgba(200,151,58,0.03) 61px);pointer-events:none;z-index:0;}
+
+.page{position:relative;z-index:1;width:100%;padding:28px 48px 36px;min-height:100vh;display:flex;flex-direction:column;gap:0;}
+
+/* ══════════════════════════════════════
+   BISMILLAH — TOP CENTER, FULL WIDTH
+   ══════════════════════════════════════ */
+.bismillah-row{
+  text-align:center;
+  margin-bottom:10px;
+}
+.bismillah{
+  font-family:'Amiri',serif;
+  font-size:2.8rem;
+  color:var(--gold);
+  letter-spacing:5px;
+  text-shadow:0 0 20px rgba(200,151,58,0.5);
+  animation:glow 3s ease-in-out infinite alternate;
+  display:inline-block;
+}
+@keyframes glow{from{text-shadow:0 0 10px rgba(200,151,58,0.3);}to{text-shadow:0 0 35px rgba(200,151,58,0.85),0 0 70px rgba(200,151,58,0.35);}}
+.gold-divider{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin:8px 0 14px;color:var(--gold);font-size:1.2rem;opacity:0.6;
+}
+.orn-line{height:1px;flex:1;background:linear-gradient(to right,transparent,var(--gold),transparent);}
+
+/* ══════════════════════════════════════
+   MASJID NAME ROW — centered
+   ══════════════════════════════════════ */
+.name-row{text-align:center;margin-bottom:20px;}
+.masjid-name{font-family:'Cinzel Decorative',cursive;font-size:3rem;color:var(--gold-light);letter-spacing:4px;text-shadow:0 0 30px rgba(200,151,58,0.4);line-height:1.1;}
+.campaign-title{font-family:'Cinzel Decorative',cursive;font-size:1.2rem;color:var(--cream);letter-spacing:3px;opacity:0.78;margin-top:4px;}
+.subtitle{font-family:'Amiri',serif;font-size:1.1rem;color:rgba(240,201,106,0.5);margin-top:4px;}
+
+/* ══════════════════════════════════════
+   TOTAL — prominent, centered
+   ══════════════════════════════════════ */
+.total-row{
+  display:flex;align-items:center;justify-content:center;gap:40px;
+  margin-bottom:18px;flex-wrap:wrap;
+}
+.total-block{text-align:center;}
+.raised-label{font-family:'Amiri',serif;font-size:1rem;color:rgba(240,201,106,0.7);text-transform:uppercase;letter-spacing:3px;}
+.raised-amount{font-family:'Cinzel Decorative',cursive;font-size:4.5rem;color:var(--gold);line-height:1;text-shadow:0 0 28px rgba(200,151,58,0.6);transition:all 0.5s ease;}
+.meta-block{display:flex;gap:36px;}
+.meta-item{text-align:center;}
+.meta-label{font-size:0.72rem;color:rgba(240,201,106,0.45);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:3px;}
+.meta-value{font-family:'Cinzel Decorative',cursive;font-size:1.4rem;color:rgba(240,201,106,0.85);}
+
+/* ══════════════════════════════════════
+   MAIN BODY — progress left | QR right
+   ══════════════════════════════════════ */
+.main-body{display:grid;grid-template-columns:1fr 260px;gap:36px;flex:1;align-items:start;}
+
+/* Progress section */
+.milestones{display:flex;justify-content:space-between;margin-bottom:10px;padding:0 6px;}
+.milestone{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:0.82rem;color:rgba(200,151,58,0.32);transition:all 0.4s ease;letter-spacing:1px;}
+.milestone.reached{color:var(--gold);animation:mReach 0.6s ease;}
+@keyframes mReach{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
+.m-dot{width:13px;height:13px;border-radius:50%;background:rgba(200,151,58,0.15);border:1px solid rgba(200,151,58,0.28);transition:all 0.4s ease;}
+.milestone.reached .m-dot{background:var(--gold);box-shadow:0 0 14px var(--gold);}
+
+.progress-wrap{position:relative;margin-bottom:12px;}
+.progress-track{width:100%;height:70px;background:rgba(255,255,255,0.03);border-radius:100px;border:1px solid rgba(200,151,58,0.16);overflow:hidden;box-shadow:inset 0 3px 10px rgba(0,0,0,0.5);}
+.progress-fill{height:100%;width:0%;border-radius:100px;background:linear-gradient(90deg,var(--teal) 0%,var(--teal-light) 28%,var(--emerald) 52%,var(--gold-dark) 78%,var(--gold) 100%);transition:width 1.4s cubic-bezier(0.22,1,0.36,1);position:relative;overflow:hidden;box-shadow:0 0 28px rgba(200,151,58,0.4);}
+.progress-fill::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);animation:shimmer 2.8s infinite;}
+@keyframes shimmer{0%{left:-55%}100%{left:160%}}
+.progress-percent{position:absolute;right:22px;top:50%;transform:translateY(-50%);font-family:'Cinzel Decorative',cursive;font-size:1.4rem;color:var(--cream);font-weight:700;pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,0.7);}
+
+.celebration{text-align:center;font-family:'Amiri',serif;font-size:1.5rem;color:var(--gold);min-height:2rem;margin:8px 0;opacity:0;transition:all 0.5s ease;text-shadow:0 0 24px rgba(200,151,58,0.6);}
+.celebration.visible{opacity:1;animation:celPulse 2s ease-in-out infinite;}
+@keyframes celPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.03);opacity:0.85}}
+
+.bbar{display:flex;height:10px;border-radius:100px;overflow:hidden;margin:16px 0 8px;background:rgba(255,255,255,0.04);gap:2px;}
+.bseg{height:100%;transition:width 1s ease;border-radius:100px;}
+.bcc{background:#4ECDC4;}.bcash{background:#45B7D1;}.bchk{background:#96CEB4;}.bpl{background:var(--gold);}
+.blegend{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;font-size:0.8rem;color:rgba(240,201,106,0.55);margin-bottom:18px;}
+.bl-item{display:flex;align-items:center;gap:6px;}
+.bl-dot{width:10px;height:10px;border-radius:50%;}
+
+.sources-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.source-card{background:linear-gradient(135deg,rgba(13,92,99,0.2),rgba(10,18,40,0.7));border:1px solid rgba(200,151,58,0.18);border-radius:16px;padding:18px 12px;text-align:center;}
+.s-icon{font-size:1.9rem;margin-bottom:7px;display:block;}
+.s-name{font-family:'Amiri',serif;font-size:0.82rem;color:rgba(240,201,106,0.6);letter-spacing:1px;margin-bottom:7px;text-transform:uppercase;}
+.s-amt{font-family:'Cinzel Decorative',cursive;font-size:1.35rem;color:var(--gold-light);}
+.s-cnt{font-size:0.7rem;color:rgba(240,201,106,0.28);margin-top:3px;}
+
+/* QR PANEL */
+.qr-panel{background:linear-gradient(160deg,rgba(200,151,58,0.1),rgba(13,40,99,0.25));border:1px solid rgba(200,151,58,0.38);border-radius:22px;padding:24px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:13px;position:relative;overflow:hidden;box-shadow:0 0 50px rgba(200,151,58,0.1);margin-top:-60px;}
+.qr-panel::before{content:'&#9789;';position:absolute;top:-14px;right:-14px;font-size:7rem;color:rgba(200,151,58,0.05);pointer-events:none;}
+.qr-label{font-family:'Amiri',serif;font-size:1.1rem;color:var(--gold-light);letter-spacing:2px;text-transform:uppercase;}
+.qr-img-wrap{background:white;border-radius:14px;padding:12px;animation:qrPulse 3s ease-in-out infinite;}
+@keyframes qrPulse{0%,100%{box-shadow:0 0 22px rgba(200,151,58,0.3),0 0 0 2px rgba(200,151,58,0.25);}50%{box-shadow:0 0 40px rgba(200,151,58,0.6),0 0 0 3px rgba(200,151,58,0.5);}}
+.qr-img-wrap img{width:185px;height:185px;display:block;border-radius:8px;}
+.qr-scan-title{font-size:1.6rem;color:var(--gold);font-family:'Amiri',serif;letter-spacing:1px;font-weight:700;}
+.qr-scan{font-size:1rem;color:rgba(240,201,106,0.6);line-height:1.6;}
+.qr-arabic{font-family:'Amiri',serif;font-size:1.7rem;color:rgba(200,151,58,0.75);}
+
+.hadith{text-align:center;padding:16px 0 0;border-top:1px solid rgba(200,151,58,0.25);margin-top:12px;}
+.hadith p{font-family:'Amiri',serif;font-size:1.25rem;color:rgba(240,201,106,0.9);font-style:italic;line-height:1.9;letter-spacing:0.3px;}
+.hadith cite{display:block;margin-top:6px;font-size:1rem;color:var(--gold);font-style:normal;letter-spacing:1px;font-weight:700;}
+
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+.bump{animation:bump 0.4s ease;}
+#fw-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
+.star{position:fixed;pointer-events:none;z-index:998;animation:starFloat linear forwards;font-size:1.4rem;}
+@keyframes starFloat{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(-200px) rotate(360deg) scale(0.3)}}
+</style>
+</head>
+<body>
+<canvas id="fw-canvas"></canvas>
+<div class="page">
+
+  <!-- BISMILLAH — TOP CENTER, ALWAYS FIRST -->
+  <div class="bismillah-row">
+    <div class="bismillah">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1614;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1605;&#1616;</div>
+  </div>
+
+  <div class="gold-divider">
+    <div class="orn-line"></div>&#10022;&nbsp;&#9789;&nbsp;&#10022;
+    <div class="orn-line"></div>
+  </div>
+
+  <!-- MASJID NAME -->
+  <div class="name-row">
+    <div class="masjid-name">Masjid Ibrahim</div>
+    <div class="campaign-title">Fundraiser Campaign</div>
+    <div class="subtitle">For the Sake of Allah &#8212; &#1604;&#1608;&#1580;&#1607; &#1575;&#1604;&#1604;&#1607;</div>
+  </div>
+
+  <!-- TOTAL + META -->
+  <div class="total-row">
+    <div class="total-block">
+      <div class="raised-label">Total Raised</div>
+      <div class="raised-amount" id="totalDisplay">$0</div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-item">
+        <div class="meta-label">Goal</div>
+        <div class="meta-value">$<span id="goalDisplay">50,000</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Remaining</div>
+        <div class="meta-value">$<span id="remainDisplay">50,000</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Donations</div>
+        <div class="meta-value" id="entryCount">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN BODY -->
+  <div class="main-body">
+    <div>
+      <div class="milestones">
+        <div class="milestone" id="m25"><div class="m-dot"></div><span>25%</span></div>
+        <div class="milestone" id="m50"><div class="m-dot"></div><span>50%</span></div>
+        <div class="milestone" id="m75"><div class="m-dot"></div><span>75%</span></div>
+        <div class="milestone" id="m100"><div class="m-dot"></div><span>100% &#128332;</span></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-percent" id="progressPct">0%</div>
+      </div>
+      <div class="celebration" id="celebration"></div>
+      <div class="bbar">
+        <div class="bseg bcc"   id="segCC"   style="width:0%"></div>
+        <div class="bseg bcash" id="segCash" style="width:0%"></div>
+        <div class="bseg bchk" id="segChk"  style="width:0%"></div>
+        <div class="bseg bpl"  id="segPl"   style="width:0%"></div>
+      </div>
+      <div class="blegend">
+        <div class="bl-item"><div class="bl-dot" style="background:#4ECDC4"></div>Credit Card</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#45B7D1"></div>Cash</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#96CEB4"></div>Checks</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#C8973A"></div>Pledges</div>
+      </div>
+      <div class="sources-grid">
+        <div class="source-card"><span class="s-icon">&#128179;</span><div class="s-name">Credit Card</div><div class="s-amt" id="dispCC">$0</div><div class="s-cnt" id="cntCC">0 donations</div></div>
+        <div class="source-card"><span class="s-icon">&#128181;</span><div class="s-name">Cash</div><div class="s-amt" id="dispCash">$0</div><div class="s-cnt" id="cntCash">0 donations</div></div>
+        <div class="source-card"><span class="s-icon">&#128221;</span><div class="s-name">Checks</div><div class="s-amt" id="dispChk">$0</div><div class="s-cnt" id="cntChk">0 donations</div></div>
+        <div class="source-card"><span class="s-icon">&#129309;</span><div class="s-name">Pledges</div><div class="s-amt" id="dispPl">$0</div><div class="s-cnt" id="cntPl">0 donations</div></div>
+      </div>
+      <div class="hadith">
+        <p>"The example of those who spend their wealth in the way of Allah is like a seed of grain which grows seven spikes; in each spike is a hundred grains."</p>
+        <cite>&#8212; Al-Baqarah 2:261</cite>
+      </div>
+    </div>
+
+    <div class="qr-panel">
+      <div class="qr-label">Donate Now</div>
+      <div class="qr-img-wrap">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="QR Code">
+      </div>
+      <div class="qr-scan-title">&#128241; Scan to Donate</div>
+      <div class="qr-scan">Point your phone camera at this code to donate online instantly</div>
+      <div class="qr-arabic">&#1580;&#1586;&#1575;&#1603; &#1575;&#1604;&#1604;&#1607; &#1582;&#1610;&#1585;&#1611;&#1575;</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SK='masjid_ibrahim_donations';
+const GK='masjid_ibrahim_goal';
+let prevTotal=0;let prevPct=0;
+const msgs={0:'',10:'Bismillah — every journey begins with a step! &#9733;',25:'SubhanAllah! A quarter of the way there! &#128332;',50:'Alhamdulillah! Halfway there — may Allah multiply your rewards! &#9789;',75:'Allahu Akbar! Three-quarters reached! &#10022;',90:'Almost there! Barakallahu Feekum! &#9789;',100:'&#127881; Alhamdulillah! Goal Reached! May Allah accept! &#127881;'};
+const canvas=document.getElementById('fw-canvas');const ctx=canvas.getContext('2d');
+let particles=[];let animId=null;
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+window.addEventListener('resize',resizeCanvas);resizeCanvas();
+const COLORS=['#C8973A','#F0C96A','#4ECDC4','#FFE66D','#A8DADC','#1B6B4E','#ffffff','#FFF3B0'];
+function launchFW(n){for(let i=0;i<n;i++)setTimeout(()=>addBurst(),i*120);if(!animId)animateFW();}
+function addBurst(){const x=80+Math.random()*(canvas.width-160);const y=80+Math.random()*(canvas.height*0.65);const color=COLORS[Math.floor(Math.random()*COLORS.length)];const num=30+Math.floor(Math.random()*20);for(let j=0;j<num;j++){const a=(Math.PI*2/num)*j;const s=2+Math.random()*6;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,alpha:1,color,size:2.5+Math.random()*2.5,decay:0.011+Math.random()*0.01,gravity:0.06});}}
+function animateFW(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.gravity;p.vx*=0.98;p.alpha-=p.decay;ctx.globalAlpha=Math.max(0,p.alpha);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;particles=particles.filter(p=>p.alpha>0);if(particles.length>0){animId=requestAnimationFrame(animateFW);}else{animId=null;ctx.clearRect(0,0,canvas.width,canvas.height);}}
+function spawnStars(n){const e=['&#10022;','&#9789;','&#11088;','&#127775;','&#10022;','&#128171;'];for(let i=0;i<n;i++){setTimeout(()=>{const s=document.createElement('div');s.className='star';s.textContent=e[Math.floor(Math.random()*e.length)];s.style.left=(5+Math.random()*88)+'vw';s.style.top=(10+Math.random()*70)+'vh';s.style.animationDuration=(1.2+Math.random()*1.8)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3500);},i*80);}}
+function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function updateMilestone(id,reached){const el=document.getElementById(id);const was=el.classList.contains('reached');el.classList.toggle('reached',reached);if(reached&&!was){el.classList.remove('reached');void el.offsetWidth;el.classList.add('reached');}}
+function miniSparkle(){
+  // small gold burst around the total number
+  const el=document.getElementById('totalDisplay');
+  const rect=el.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  const colors=['#C8973A','#F0C96A','#FFE66D','#ffffff'];
+  for(let j=0;j<20;j++){
+    const a=Math.random()*Math.PI*2;
+    const s=1.5+Math.random()*3.5;
+    particles.push({x:cx+( Math.random()-0.5)*rect.width*0.6,y:cy+(Math.random()-0.5)*rect.height*0.6,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,alpha:1,color:colors[Math.floor(Math.random()*colors.length)],size:2+Math.random()*2.5,decay:0.025+Math.random()*0.015,gravity:0.03});
+  }
+  if(!animId)animateFW();
+}
+function pulseTotal(){
+  const el=document.getElementById('totalDisplay');
+  el.style.transition='transform 0.15s ease,text-shadow 0.15s ease';
+  el.style.transform='scale(1.1)';
+  el.style.textShadow='0 0 50px rgba(200,151,58,1),0 0 100px rgba(200,151,58,0.5)';
+  setTimeout(()=>{el.style.transform='scale(1)';el.style.textShadow='0 0 28px rgba(200,151,58,0.6)';},250);
+  miniSparkle();
+}
+function syncFromStorage(){
+  let entries=[];try{entries=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){}
+  const goal=parseFloat(localStorage.getItem(GK)||'50000')||50000;
+  const tots={cc:0,cash:0,check:0,pledge:0};const cnts={cc:0,cash:0,check:0,pledge:0};
+  entries.forEach(e=>{tots[e.type]+=e.amount;cnts[e.type]++;});
+  const total=Object.values(tots).reduce((a,b)=>a+b,0);
+  const pct=Math.min((total/goal)*100,100);
+  document.getElementById('goalDisplay').textContent=fmt(goal);
+  document.getElementById('remainDisplay').textContent=fmt(Math.max(0,goal-total));
+  document.getElementById('entryCount').textContent=entries.length;
+  const dispEl=document.getElementById('totalDisplay');
+  if(total!==prevTotal){dispEl.textContent='$'+fmt(total);dispEl.classList.remove('bump');void dispEl.offsetWidth;dispEl.classList.add('bump');}
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=Math.round(pct)+'%';
+  document.getElementById('dispCC').textContent='$'+fmt(tots.cc);document.getElementById('dispCash').textContent='$'+fmt(tots.cash);document.getElementById('dispChk').textContent='$'+fmt(tots.check);document.getElementById('dispPl').textContent='$'+fmt(tots.pledge);
+  document.getElementById('cntCC').textContent=cnts.cc+' donation'+(cnts.cc!==1?'s':'');document.getElementById('cntCash').textContent=cnts.cash+' donation'+(cnts.cash!==1?'s':'');document.getElementById('cntChk').textContent=cnts.check+' donation'+(cnts.check!==1?'s':'');document.getElementById('cntPl').textContent=cnts.pledge+' donation'+(cnts.pledge!==1?'s':'');
+  if(total>0){document.getElementById('segCC').style.width=(tots.cc/total*100)+'%';document.getElementById('segCash').style.width=(tots.cash/total*100)+'%';document.getElementById('segChk').style.width=(tots.check/total*100)+'%';document.getElementById('segPl').style.width=(tots.pledge/total*100)+'%';}
+  updateMilestone('m25',pct>=25);updateMilestone('m50',pct>=50);updateMilestone('m75',pct>=75);updateMilestone('m100',pct>=100);
+  let msg='';[100,90,75,50,25,10,0].forEach(t=>{if(pct>=t&&!msg)msg=msgs[t]||'';});
+  const cel=document.getElementById('celebration');cel.innerHTML=msg;cel.classList.toggle('visible',!!msg);
+  // Big milestone fireworks at 25/50/75/100
+  const bigMilestone=[25,50,75,100].some(m=>prevPct<m&&pct>=m);
+  if(bigMilestone){launchFW(pct>=100?130:50);spawnStars(pct>=100?25:10);}
+
+  // Small gold sparkle burst every 5%
+  const small5=[5,10,15,20,30,35,40,45,55,60,65,70,80,85,90,95].some(m=>prevPct<m&&pct>=m);
+  if(small5){miniSparkle();spawnStars(3);}
+
+  // Pulse + tiny sparkle on every single donation
+  if(total!==prevTotal&&total>0){pulseTotal();}
+
+  prevTotal=total;prevPct=pct;
+}
+setInterval(syncFromStorage,1000);
+syncFromStorage();
+</script>
+</body>
+</html>
