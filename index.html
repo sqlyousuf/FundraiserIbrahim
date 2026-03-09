@@ -160,10 +160,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="meta-label">Remaining</div>
         <div class="meta-value">$<span id="remainDisplay">50,000</span></div>
       </div>
-      <div class="meta-item">
-        <div class="meta-label">Donations</div>
-        <div class="meta-value" id="entryCount">0</div>
-      </div>
     </div>
   </div>
 
@@ -195,10 +191,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="bl-item"><div class="bl-dot" style="background:#C8973A"></div>Pledges</div>
       </div>
       <div class="sources-grid">
-        <div class="source-card"><span class="s-icon">&#128179;</span><div class="s-name">Credit Card</div><div class="s-amt" id="dispCC">$0</div><div class="s-cnt" id="cntCC">0 donations</div></div>
-        <div class="source-card"><span class="s-icon">&#128181;</span><div class="s-name">Cash</div><div class="s-amt" id="dispCash">$0</div><div class="s-cnt" id="cntCash">0 donations</div></div>
-        <div class="source-card"><span class="s-icon">&#128221;</span><div class="s-name">Checks</div><div class="s-amt" id="dispChk">$0</div><div class="s-cnt" id="cntChk">0 donations</div></div>
-        <div class="source-card"><span class="s-icon">&#129309;</span><div class="s-name">Pledges</div><div class="s-amt" id="dispPl">$0</div><div class="s-cnt" id="cntPl">0 donations</div></div>
+        <div class="source-card"><span class="s-icon">&#128179;</span><div class="s-name">Credit Card</div><div class="s-amt" id="dispCC">$0</div></div>
+        <div class="source-card"><span class="s-icon">&#128181;</span><div class="s-name">Cash</div><div class="s-amt" id="dispCash">$0</div></div>
+        <div class="source-card"><span class="s-icon">&#128221;</span><div class="s-name">Checks</div><div class="s-amt" id="dispChk">$0</div></div>
+        <div class="source-card"><span class="s-icon">&#129309;</span><div class="s-name">Pledges</div><div class="s-amt" id="dispPl">$0</div></div>
       </div>
     </div>
 
@@ -263,19 +259,17 @@ function pulseTotal(){
 function syncFromStorage(){
   let entries=[];try{entries=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){}
   const goal=parseFloat(localStorage.getItem(GK)||'50000')||50000;
-  const tots={cc:0,cash:0,check:0,pledge:0};const cnts={cc:0,cash:0,check:0,pledge:0};
-  entries.forEach(e=>{tots[e.type]+=e.amount;cnts[e.type]++;});
+  const tots={cc:0,cash:0,check:0,pledge:0};
+  entries.forEach(e=>{tots[e.type]+=e.amount;});
   const total=Object.values(tots).reduce((a,b)=>a+b,0);
   const pct=Math.min((total/goal)*100,100);
   document.getElementById('goalDisplay').textContent=fmt(goal);
   document.getElementById('remainDisplay').textContent=fmt(Math.max(0,goal-total));
-  document.getElementById('entryCount').textContent=entries.length;
   const dispEl=document.getElementById('totalDisplay');
   if(total!==prevTotal){dispEl.textContent='$'+fmt(total);dispEl.classList.remove('bump');void dispEl.offsetWidth;dispEl.classList.add('bump');}
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=Math.round(pct)+'%';
   document.getElementById('dispCC').textContent='$'+fmt(tots.cc);document.getElementById('dispCash').textContent='$'+fmt(tots.cash);document.getElementById('dispChk').textContent='$'+fmt(tots.check);document.getElementById('dispPl').textContent='$'+fmt(tots.pledge);
-  document.getElementById('cntCC').textContent=cnts.cc+' donation'+(cnts.cc!==1?'s':'');document.getElementById('cntCash').textContent=cnts.cash+' donation'+(cnts.cash!==1?'s':'');document.getElementById('cntChk').textContent=cnts.check+' donation'+(cnts.check!==1?'s':'');document.getElementById('cntPl').textContent=cnts.pledge+' donation'+(cnts.pledge!==1?'s':'');
   if(total>0){document.getElementById('segCC').style.width=(tots.cc/total*100)+'%';document.getElementById('segCash').style.width=(tots.cash/total*100)+'%';document.getElementById('segChk').style.width=(tots.check/total*100)+'%';document.getElementById('segPl').style.width=(tots.pledge/total*100)+'%';}
   updateMilestone('m25',pct>=25);updateMilestone('m50',pct>=50);updateMilestone('m75',pct>=75);updateMilestone('m100',pct>=100);
   let msg='';[100,90,75,50,25,10,0].forEach(t=>{if(pct>=t&&!msg)msg=msgs[t]||'';});
