@@ -1,5 +1,5 @@
 # FundraiserIbrahim# Masjid Ibrahim Fundraiser
-
+qr-code.png
 This project is a live fundraiser display system for Masjid Ibrahim, consisting of two HTML files that work together.
 
 ## Files
