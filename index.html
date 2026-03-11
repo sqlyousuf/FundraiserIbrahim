@@ -71,7 +71,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 /* ══════════════════════════════════════
    MAIN BODY — progress left | QR right
    ══════════════════════════════════════ */
-.main-body{display:grid;grid-template-columns:minmax(0,4fr) minmax(340px,1fr);gap:32px;flex:1;align-items:center;min-height:0;}
+.main-body{display:grid;grid-template-columns:minmax(0,4fr) minmax(360px,1fr);gap:32px;flex:1;align-items:start;min-height:0;}
 
 /* Progress section */
 .milestones{display:flex;justify-content:space-between;margin-bottom:10px;padding:0 6px;}
@@ -93,20 +93,20 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 @keyframes celPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.03);opacity:0.85}}
 
 /* QR PANEL */
-.qr-panel{background:linear-gradient(160deg,rgba(200,151,58,0.1),rgba(13,40,99,0.25));border:1px solid rgba(200,151,58,0.38);border-radius:22px;padding:30px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;overflow:hidden;box-shadow:0 0 50px rgba(200,151,58,0.1);margin-top:0;width:100%;align-self:center;}
+.qr-panel{background:linear-gradient(160deg,rgba(200,151,58,0.1),rgba(13,40,99,0.25));border:1px solid rgba(200,151,58,0.38);border-radius:22px;padding:34px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;overflow:hidden;box-shadow:0 0 50px rgba(200,151,58,0.1);margin-top:-24px;width:100%;align-self:start;}
 .qr-panel::before{content:'&#9789;';position:absolute;top:-14px;right:-14px;font-size:7rem;color:rgba(200,151,58,0.05);pointer-events:none;}
 .qr-label{font-family:'Amiri',serif;font-size:1.35rem;color:var(--gold-light);letter-spacing:2px;text-transform:uppercase;}
 .qr-img-wrap{background:white;border-radius:14px;padding:12px;animation:qrPulse 3s ease-in-out infinite;}
 @keyframes qrPulse{0%,100%{box-shadow:0 0 22px rgba(200,151,58,0.3),0 0 0 2px rgba(200,151,58,0.25);}50%{box-shadow:0 0 40px rgba(200,151,58,0.6),0 0 0 3px rgba(200,151,58,0.5);}}
-.qr-img-wrap img{width:270px;height:270px;display:block;border-radius:8px;}
+.qr-img-wrap img{width:310px;height:310px;display:block;border-radius:8px;}
 .qr-scan-title{font-size:1.9rem;color:var(--gold);font-family:'Amiri',serif;letter-spacing:1px;font-weight:700;}
 .qr-scan{font-size:1.2rem;color:rgba(240,201,106,0.6);line-height:1.6;}
 .qr-arabic{font-family:'Amiri',serif;font-size:2rem;color:rgba(200,151,58,0.75);}
 
 .hadith{text-align:center;padding:10px 0 0;border-top:1px solid rgba(200,151,58,0.25);margin:8px auto 0;max-width:980px;}
-.hadith p{font-family:'Amiri',serif;font-size:1.9rem;color:rgba(240,201,106,0.9);font-style:italic;line-height:1.75;letter-spacing:0.3px;}
-.hadith cite{display:block;margin-top:8px;font-size:1.45rem;color:var(--gold);font-style:normal;letter-spacing:1px;font-weight:700;}
-.legal-note{text-align:center;margin-top:12px;font-family:Lato,sans-serif;font-size:1.35rem;color:rgba(240,201,106,0.82);font-weight:700;letter-spacing:0.2px;}
+.hadith p{font-family:'Amiri',serif;font-size:2.1rem;color:rgba(240,201,106,0.9);font-style:italic;line-height:1.7;letter-spacing:0.3px;}
+.hadith cite{display:block;margin-top:8px;font-size:1.7rem;color:var(--gold);font-style:normal;letter-spacing:1px;font-weight:700;}
+.legal-note{text-align:center;margin-top:12px;font-family:Lato,sans-serif;font-size:1.5rem;color:rgba(240,201,106,0.82);font-weight:700;letter-spacing:0.2px;}
 
 @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
 .bump{animation:bump 0.4s ease;}
@@ -185,7 +185,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   <div class="hadith">
     <p>&ldquo;Whoever builds a mosque for the sake of Allah, Allah will build for them a house in Jannah.&rdquo;</p>
     <cite>&#8212; Prophet Muhammad &#65018;</cite>
-    <cite>Reported in Sahih al-Bukhari (Hadith 450) and Sahih Muslim (Hadith 533).</cite>
   </div>
 
   <p class="legal-note">American Waqf Foundation (EIN: 84-2645759) is a registered 501(c)(3) nonprofit.</p>
