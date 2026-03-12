@@ -73,9 +73,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .main-body > div:first-child{margin-top:132px;}
 
 .right-stack{display:flex;flex-direction:column;align-items:center;gap:14px;}
-.goal-side{width:92%;text-align:center;}
-.goal-side .meta-label{font-size:1rem;color:rgba(240,201,106,0.6);}
-.goal-side .meta-value{font-size:2.1rem;}
+
+.progress-top-meta{display:flex;justify-content:flex-end;margin-bottom:12px;}
+.goal-inline{min-width:220px;text-align:center;}
+.goal-inline .meta-label{font-size:1rem;color:rgba(240,201,106,0.6);}
+.goal-inline .meta-value{font-size:2.1rem;}
 
 .remain-under{margin-top:10px;text-align:left;}
 .remain-under .meta-label{font-size:0.85rem;color:rgba(240,201,106,0.55);letter-spacing:1.4px;}
@@ -154,6 +156,13 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   <!-- MAIN BODY -->
   <div class="main-body">
     <div>
+      <div class="progress-top-meta">
+        <div class="meta-item goal-inline">
+          <div class="meta-label">Goal</div>
+          <div class="meta-value">$<span id="goalDisplay">50,000</span></div>
+        </div>
+      </div>
+
       <div class="milestones">
         <div class="milestone reached" id="m0"><div class="m-dot"></div><span>0%</span></div>
         <div class="milestone" id="m25"><div class="m-dot"></div><span>25%</span></div>
@@ -173,10 +182,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     </div>
 
     <div class="right-stack">
-      <div class="meta-item goal-side">
-        <div class="meta-label">Goal</div>
-        <div class="meta-value">$<span id="goalDisplay">50,000</span></div>
-      </div>
       <div class="qr-panel">
         <div class="qr-label">Donate Now</div>
         <div class="qr-img-wrap">

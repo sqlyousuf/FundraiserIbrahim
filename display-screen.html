@@ -74,6 +74,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .main-body{display:grid;grid-template-columns:minmax(0,4fr) minmax(360px,1fr);gap:32px;flex:1;align-items:start;min-height:0;}
 .main-body > div:first-child{margin-top:92px;}
 
+.progress-top-meta{display:flex;justify-content:flex-end;margin-bottom:12px;}
+.goal-inline{min-width:220px;text-align:center;}
+.goal-inline .meta-label{font-size:1rem;color:rgba(240,201,106,0.6);}
+.goal-inline .meta-value{font-size:2.1rem;}
+
 /* Progress section */
 .milestones{display:flex;justify-content:space-between;margin-bottom:10px;padding:0 6px;}
 .milestone{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:1rem;color:rgba(200,151,58,0.32);transition:all 0.4s ease;letter-spacing:1px;}
@@ -142,10 +147,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
       <div class="raised-amount" id="totalDisplay">$0</div>
     </div>
     <div class="meta-block">
-      <div class="meta-item">
-        <div class="meta-label">Goal</div>
-        <div class="meta-value">$<span id="goalDisplay">50,000</span></div>
-      </div>
       <div class="meta-item remain-item">
         <div class="meta-label">Remaining</div>
         <div class="meta-value">$<span id="remainDisplay">50,000</span></div>
@@ -160,6 +161,13 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   <!-- MAIN BODY -->
   <div class="main-body">
     <div>
+      <div class="progress-top-meta">
+        <div class="meta-item goal-inline">
+          <div class="meta-label">Goal</div>
+          <div class="meta-value">$<span id="goalDisplay">50,000</span></div>
+        </div>
+      </div>
+
       <div class="milestones">
         <div class="milestone" id="m25"><div class="m-dot"></div><span>25%</span></div>
         <div class="milestone" id="m50"><div class="m-dot"></div><span>50%</span></div>
