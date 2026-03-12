@@ -75,14 +75,14 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .main-body > div:first-child{margin-top:92px;}
 
 .progress-top-meta{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:12px;}
-.total-inline .raised-label{font-size:1.25rem;}
+.total-inline .raised-label{font-size:2rem;}
 .total-inline .raised-amount{font-size:5.9rem;}
 .goal-inline{min-width:260px;text-align:center;}
-.goal-inline .meta-label{font-size:1.25rem;color:rgba(240,201,106,0.65);}
+.goal-inline .meta-label{font-size:2rem;color:rgba(240,201,106,0.65);}
 .goal-inline .meta-value{font-size:5.9rem;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(200,151,58,0.6);}
 
-.remain-under{margin-top:10px;text-align:left;}
-.remain-under .meta-label{font-size:1.25rem;color:rgba(240,201,106,0.65);letter-spacing:2px;}
+.remain-under{margin-top:10px;text-align:center;}
+.remain-under .meta-label{font-size:2rem;color:rgba(240,201,106,0.65);letter-spacing:2px;}
 .remain-under .meta-value{font-size:5.9rem;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(200,151,58,0.6);}
 
 /* Progress section */
@@ -208,7 +208,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 const SK='masjid_ibrahim_donations';
 const GK='masjid_ibrahim_goal';
 let prevTotal=0;let prevPct=0;
-const msgs={0:'',10:'Bismillah — every journey begins with a step! &#9733;',25:'SubhanAllah! A quarter of the way there! &#128332;',50:'Alhamdulillah! Halfway there — may Allah multiply your rewards! &#9789;',75:'Allahu Akbar! Three-quarters reached! &#10022;',90:'Almost there! Barakallahu Feekum! &#9789;',100:'&#127881; Alhamdulillah! Goal Reached! May Allah accept! &#127881;'};
+const msgs={0:'',10:'',25:'',50:'',75:'',90:'',100:''};
 const canvas=document.getElementById('fw-canvas');const ctx=canvas.getContext('2d');
 let particles=[];let animId=null;
 function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
