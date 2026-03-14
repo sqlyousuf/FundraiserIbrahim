@@ -280,9 +280,6 @@ function syncFromStorage(){
   // Trigger the same celebration intensity used at the 25% milestone.
   if(sparkleChanged){launchFW(50);spawnStars(10);}
 
-  // Fallback if entries changed but no explicit sparkle signal is found.
-  if(entryChanged&&!sparkleChanged){launchFW(50);spawnStars(10);}
-
   if(total!==prevTotal&&total>0){pulseTotal();}
 
   prevTotal=total;prevPct=pct;prevEntriesSig=entriesSig;prevSparkleTick=sparkleEvent.tick;
