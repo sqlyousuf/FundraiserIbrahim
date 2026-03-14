@@ -287,6 +287,11 @@ function syncFromStorage(){
 
   prevTotal=total;prevPct=pct;prevEntriesSig=entriesSig;prevSparkleTick=sparkleEvent.tick;
 }
+window.addEventListener('storage',e=>{
+  if(!e.key||e.key===SK||e.key===GK||e.key===EK){
+    syncFromStorage();
+  }
+});
 setInterval(syncFromStorage,1000);
 syncFromStorage();
 </script>
