@@ -52,12 +52,6 @@ body{background:var(--dark);color:var(--cream);font-family:Lato,sans-serif;min-h
 .lbl-pl   {color:var(--gold);}
 .field-input-wrap{position:relative;}
 .field-input-wrap .pfx{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-weight:700;font-size:0.95rem;}
-.portal-select{
-  width:100%;margin-top:6px;background:rgba(0,0,0,0.3);
-  border:1px solid var(--border);border-radius:8px;color:var(--cream);
-  font-size:0.78rem;font-weight:700;padding:7px 10px;outline:none;font-family:Lato,sans-serif;
-}
-.portal-select:focus{border-color:#4ECDC4;}
 .pfx-cc   {color:#4ECDC4;}
 .pfx-cash {color:#45B7D1;}
 .pfx-chk  {color:#96CEB4;}
@@ -152,13 +146,16 @@ tr:hover td{background:rgba(200,151,58,0.04);}
     <div class="entry-panel-title">&#9889; Fast Entry — Fill whichever fields apply, then press Add</div>
     <div class="fields-row">
       <div class="field-box">
-        <div class="field-label lbl-cc"><span>&#128179;</span> Credit Card</div>
-        <div class="field-input-wrap"><span class="pfx pfx-cc">$</span><input class="field-inp inp-cc" type="number" id="inCC" placeholder="0" min="0" step="0.01"></div>
-        <select class="portal-select" id="ccPortal">
-          <option value="MAdinaapps">MAdinaapps</option>
-          <option value="Zeffy">Zeffy</option>
-          <option value="Tiptap">Tiptap</option>
-        </select>
+        <div class="field-label lbl-cc"><span>&#128179;</span> MAdinaapps</div>
+        <div class="field-input-wrap"><span class="pfx pfx-cc">$</span><input class="field-inp inp-cc" type="number" id="inCCMadina" placeholder="0" min="0" step="0.01"></div>
+      </div>
+      <div class="field-box">
+        <div class="field-label lbl-cc"><span>&#128179;</span> Zeffy</div>
+        <div class="field-input-wrap"><span class="pfx pfx-cc">$</span><input class="field-inp inp-cc" type="number" id="inCCZeffy" placeholder="0" min="0" step="0.01"></div>
+      </div>
+      <div class="field-box">
+        <div class="field-label lbl-cc"><span>&#128179;</span> Tiptap</div>
+        <div class="field-input-wrap"><span class="pfx pfx-cc">$</span><input class="field-inp inp-cc" type="number" id="inCCTiptap" placeholder="0" min="0" step="0.01"></div>
       </div>
       <div class="field-box">
         <div class="field-label lbl-cash"><span>&#128181;</span> Cash</div>
@@ -246,23 +243,22 @@ function donorText(e){
 }
 
 function addEntry(){
-  const cc   = parseFloat(document.getElementById('inCC').value)||0;
+  const ccMadina = parseFloat(document.getElementById('inCCMadina').value)||0;
+  const ccZeffy  = parseFloat(document.getElementById('inCCZeffy').value)||0;
+  const ccTiptap = parseFloat(document.getElementById('inCCTiptap').value)||0;
   const cash = parseFloat(document.getElementById('inCash').value)||0;
   const chk  = parseFloat(document.getElementById('inChk').value)||0;
   const pl   = parseFloat(document.getElementById('inPl').value)||0;
   const name = document.getElementById('newName').value.trim();
-  const ccPortal=document.getElementById('ccPortal').value;
+  const ccTotal=ccMadina+ccZeffy+ccTiptap;
 
-  if(cc+cash+chk+pl <= 0){ showToast('&#9888; Enter at least one amount'); return; }
+  if(ccTotal+cash+chk+pl <= 0){ showToast('&#9888; Enter at least one amount'); return; }
 
   const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   const added=[];
-  let ccMode='';
-  if(cc>0){
-    const r=upsertCCPortal(cc,name,ccPortal,now);
-    added.push(r.entry);
-    ccMode=r.mode;
-  }
+  if(ccMadina>0){added.push(upsertCCPortal(ccMadina,name,'MAdinaapps',now).entry);}
+  if(ccZeffy>0){added.push(upsertCCPortal(ccZeffy,name,'Zeffy',now).entry);}
+  if(ccTiptap>0){added.push(upsertCCPortal(ccTiptap,name,'Tiptap',now).entry);}
   if(cash>0){ const e={id:Date.now()+1, type:'cash',  amount:cash, name,time:now}; entries.unshift(e); added.push(e); }
   if(chk>0) { const e={id:Date.now()+2, type:'check', amount:chk,  name,time:now}; entries.unshift(e); added.push(e); }
   if(pl>0)  { const e={id:Date.now()+3, type:'pledge',amount:pl,   name,time:now}; entries.unshift(e); added.push(e); }
@@ -271,16 +267,11 @@ function addEntry(){
   save(); render();
 
   // Clear all fields, focus first
-  ['inCC','inCash','inChk','inPl','newName'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('inCC').focus();
+  ['inCCMadina','inCCZeffy','inCCTiptap','inCash','inChk','inPl','newName'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('inCCMadina').focus();
 
-  const total = cc+cash+chk+pl;
-  if(cc>0&&cash+chk+pl===0){
-    const verb=ccMode==='updated'?'updated':'saved';
-    showToast('&#10003; '+ccPortal+' total '+verb+' to $'+fmt2(cc));
-  }else{
-    showToast('&#10003; $'+fmt2(total)+' saved — Barakallahu feekum!');
-  }
+  const total = ccTotal+cash+chk+pl;
+  showToast('&#10003; $'+fmt2(total)+' saved — Barakallahu feekum!');
 }
 
 function deleteEntry(id){
@@ -334,7 +325,7 @@ function showToast(msg){
 }
 
 // Enter on any amount field OR name field triggers add
-['inCC','inCash','inChk','inPl'].forEach(id=>{
+['inCCMadina','inCCZeffy','inCCTiptap','inCash','inChk','inPl'].forEach(id=>{
   document.getElementById(id).addEventListener('keydown',e=>{
     if(e.key==='Enter') addEntry();
   });
@@ -348,7 +339,7 @@ setInterval(()=>{load();render();},2000);
 
 load(); render();
 // Auto-focus CC field
-document.getElementById('inCC').focus();
+document.getElementById('inCCMadina').focus();
 </script>
 </body>
 </html>
