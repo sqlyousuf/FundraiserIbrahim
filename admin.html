@@ -242,6 +242,19 @@ function donorText(e){
   return e.name||'<span style="opacity:0.25">—</span>';
 }
 
+function getPortalAmount(portal){
+  const row=entries.find(e=>e.type==='cc'&&e.portal===portal);
+  return row?row.amount:0;
+}
+
+function syncPortalInputs(){
+  const activeId=(document.activeElement&&document.activeElement.id)||'';
+  if(activeId==='inCCMadina'||activeId==='inCCZeffy'||activeId==='inCCTiptap') return;
+  document.getElementById('inCCMadina').value=getPortalAmount('MAdinaapps')||'';
+  document.getElementById('inCCZeffy').value=getPortalAmount('Zeffy')||'';
+  document.getElementById('inCCTiptap').value=getPortalAmount('Tiptap')||'';
+}
+
 function addEntry(){
   const ccMadina = parseFloat(document.getElementById('inCCMadina').value)||0;
   const ccZeffy  = parseFloat(document.getElementById('inCCZeffy').value)||0;
@@ -267,7 +280,8 @@ function addEntry(){
   save(); render();
 
   // Clear all fields, focus first
-  ['inCCMadina','inCCZeffy','inCCTiptap','inCash','inChk','inPl','newName'].forEach(id=>document.getElementById(id).value='');
+  ['inCash','inChk','inPl','newName'].forEach(id=>document.getElementById(id).value='');
+  syncPortalInputs();
   document.getElementById('inCCMadina').focus();
 
   const total = ccTotal+cash+chk+pl;
@@ -288,6 +302,7 @@ function render(){
   const cnts={cc:0,cash:0,check:0,pledge:0};
   entries.forEach(e=>{tots[e.type]+=e.amount;cnts[e.type]++;});
   const total=Object.values(tots).reduce((a,b)=>a+b,0);
+  syncPortalInputs();
 
   document.getElementById('sumCC').textContent   ='$'+fmt(tots.cc);
   document.getElementById('sumCash').textContent ='$'+fmt(tots.cash);
