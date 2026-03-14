@@ -199,9 +199,15 @@ tr:hover td{background:rgba(200,151,58,0.04);}
 <script>
 const SK='masjid_ibrahim_donations';
 const GK='masjid_ibrahim_goal';
+const EK='masjid_ibrahim_sparkle_tick';
 let entries=[];
 let currentTab='all';
 let lastId=null;
+
+function triggerSparkle(count){
+  const c=Math.max(1,Math.floor(count)||1);
+  localStorage.setItem(EK,JSON.stringify({tick:Date.now()+Math.random(),count:c}));
+}
 
 function load(){
   try{entries=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){entries=[];}
@@ -278,6 +284,7 @@ function addEntry(){
 
   if(added.length) lastId = added[0].id;
   save(); render();
+  if(added.length) triggerSparkle(added.length);
 
   // Clear all fields, focus first
   ['inCash','inChk','inPl','newName'].forEach(id=>document.getElementById(id).value='');

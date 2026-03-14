@@ -205,8 +205,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 <script>
 const SK='masjid_ibrahim_donations';
 const GK='masjid_ibrahim_goal';
+const EK='masjid_ibrahim_sparkle_tick';
 let prevTotal=0;let prevPct=0;
 let prevEntriesSig='';
+let prevSparkleTick='';
 const msgs={0:'',10:'',25:'',50:'',75:'',90:'',100:''};
 const canvas=document.getElementById('fw-canvas');const ctx=canvas.getContext('2d');
 let particles=[];let animId=null;
@@ -247,6 +249,12 @@ function syncFromStorage(){
   let entries=[];try{entries=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){}
   const entriesSig=JSON.stringify(entries.map(e=>[e.id,e.type,e.amount,e.time,e.portal||'',e.name||'']));
   const entryChanged=prevEntriesSig!==''&&entriesSig!==prevEntriesSig;
+  let sparkleEvent={tick:'',count:1};
+  try{
+    const parsed=JSON.parse(localStorage.getItem(EK)||'null');
+    if(parsed&&parsed.tick){sparkleEvent={tick:String(parsed.tick),count:Math.max(1,Math.floor(parsed.count)||1)};}
+  }catch(e){}
+  const sparkleChanged=sparkleEvent.tick!==''&&sparkleEvent.tick!==prevSparkleTick;
   const goal=parseFloat(localStorage.getItem(GK)||'50000')||50000;
   const tots={cc:0,cash:0,check:0,pledge:0};
   entries.forEach(e=>{tots[e.type]+=e.amount;});
@@ -269,12 +277,15 @@ function syncFromStorage(){
   const small5=[5,10,15,20,30,35,40,45,55,60,65,70,80,85,90,95].some(m=>prevPct<m&&pct>=m);
   if(small5){miniSparkle();spawnStars(3);}
 
-  // Trigger a small sprinkle whenever entries are updated.
-  if(entryChanged){miniSparkle();spawnStars(3);}
+  // Trigger sparkle for each explicit add event from admin.
+  if(sparkleChanged){miniSparkle(Math.min(2.4,1+(sparkleEvent.count-1)*0.25));spawnStars(Math.min(12,2+sparkleEvent.count));}
+
+  // Fallback if entries changed but no explicit sparkle signal is found.
+  if(entryChanged&&!sparkleChanged){miniSparkle();spawnStars(3);}
 
   if(total!==prevTotal&&total>0){pulseTotal();}
 
-  prevTotal=total;prevPct=pct;prevEntriesSig=entriesSig;
+  prevTotal=total;prevPct=pct;prevEntriesSig=entriesSig;prevSparkleTick=sparkleEvent.tick;
 }
 setInterval(syncFromStorage,1000);
 syncFromStorage();
