@@ -209,6 +209,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 const SK='masjid_ibrahim_donations';
 const GK='masjid_ibrahim_goal';
 let prevTotal=0;let prevPct=0;
+let prevEntriesSig='';
 const msgs={0:'',10:'',25:'',50:'',75:'',90:'',100:''};
 const canvas=document.getElementById('fw-canvas');const ctx=canvas.getContext('2d');
 let particles=[];let animId=null;
@@ -221,17 +222,19 @@ function animateFW(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.for
 function spawnStars(n){const e=['&#10022;','&#9789;','&#11088;','&#127775;','&#10022;','&#128171;'];for(let i=0;i<n;i++){setTimeout(()=>{const s=document.createElement('div');s.className='star';s.textContent=e[Math.floor(Math.random()*e.length)];s.style.left=(5+Math.random()*88)+'vw';s.style.top=(10+Math.random()*70)+'vh';s.style.animationDuration=(1.2+Math.random()*1.8)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3500);},i*80);}}
 function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
 function updateMilestone(id,reached){const el=document.getElementById(id);const was=el.classList.contains('reached');el.classList.toggle('reached',reached);if(reached&&!was){el.classList.remove('reached');void el.offsetWidth;el.classList.add('reached');}}
-function miniSparkle(){
+function miniSparkle(intensity=1){
   // small gold burst around the total number
   const el=document.getElementById('totalDisplay');
   const rect=el.getBoundingClientRect();
   const cx=rect.left+rect.width/2;
   const cy=rect.top+rect.height/2;
   const colors=['#C8973A','#F0C96A','#FFE66D','#ffffff'];
-  for(let j=0;j<20;j++){
+  const count=Math.max(8,Math.round(20*intensity));
+  const speed=Math.max(0.6,intensity);
+  for(let j=0;j<count;j++){
     const a=Math.random()*Math.PI*2;
-    const s=1.5+Math.random()*3.5;
-    particles.push({x:cx+( Math.random()-0.5)*rect.width*0.6,y:cy+(Math.random()-0.5)*rect.height*0.6,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,alpha:1,color:colors[Math.floor(Math.random()*colors.length)],size:2+Math.random()*2.5,decay:0.025+Math.random()*0.015,gravity:0.03});
+    const s=(1.5+Math.random()*3.5)*speed;
+    particles.push({x:cx+( Math.random()-0.5)*rect.width*0.6,y:cy+(Math.random()-0.5)*rect.height*0.6,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,alpha:1,color:colors[Math.floor(Math.random()*colors.length)],size:(2+Math.random()*2.5)*speed,decay:0.025+Math.random()*0.015,gravity:0.03});
   }
   if(!animId)animateFW();
 }
@@ -245,6 +248,8 @@ function pulseTotal(){
 }
 function syncFromStorage(){
   let entries=[];try{entries=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){}
+  const entriesSig=JSON.stringify(entries.map(e=>[e.id,e.type,e.amount,e.time,e.portal||'',e.name||'']));
+  const entryChanged=prevEntriesSig!==''&&entriesSig!==prevEntriesSig;
   const goal=parseFloat(localStorage.getItem(GK)||'50000')||50000;
   const tots={cc:0,cash:0,check:0,pledge:0};
   entries.forEach(e=>{tots[e.type]+=e.amount;});
@@ -268,10 +273,12 @@ function syncFromStorage(){
   const small5=[5,10,15,20,30,35,40,45,55,60,65,70,80,85,90,95].some(m=>prevPct<m&&pct>=m);
   if(small5){miniSparkle();spawnStars(3);}
 
-  // Pulse + tiny sparkle on every single donation
+  // Trigger a small sprinkle whenever entries are updated.
+  if(entryChanged){miniSparkle(0.65);spawnStars(2);}
+
   if(total!==prevTotal&&total>0){pulseTotal();}
 
-  prevTotal=total;prevPct=pct;
+  prevTotal=total;prevPct=pct;prevEntriesSig=entriesSig;
 }
 setInterval(syncFromStorage,1000);
 syncFromStorage();
